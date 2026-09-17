@@ -3,7 +3,7 @@ GOIÁS RP — LAUNCHER ANDROID
 
 Primeira versão do projeto:
 - Visual azul/preto
-- Nome Goiás RP
+- Nome PikeFelipe
 - IP/porta centralizados no código
 - Botões Baixar/Atualizar e Jogar
 - Base pronta para integrar o sistema de arquivos/mods

@@ -1,5 +1,0 @@
-<resources>
-<style name="Theme.GoiasRP" parent="android:style/Theme.Material.NoActionBar">
-    <item name="android:fontFamily">sans</item><item name="android:colorAccent">@color/blue</item>
-    <item name="android:navigationBarColor">@color/dark</item><item name="android:statusBarColor">@color/dark</item>
-</style></resources>

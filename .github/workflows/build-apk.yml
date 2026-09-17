@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Baixar projeto
         uses: actions/checkout@v4
@@ -20,6 +21,8 @@ jobs:
 
       - name: Configurar Android
         uses: android-actions/setup-android@v3
+        with:
+          packages: ''
 
       - name: Instalar SDK Android
         run: sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"

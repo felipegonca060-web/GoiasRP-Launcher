@@ -1,109 +1,124 @@
 package br.goiasrp.launcher;
 
-import android.app.*;
-import android.os.*;
+import android.app.Activity;
+import android.os.Bundle;
 import android.graphics.Color;
-import android.content.*;
-import android.content.pm.ActivityInfo;
-import android.view.*;
-import android.widget.*;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.view.Gravity;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
     private static final String GAME_PACKAGE = "br.goiasrp.game";
     private static final String GAME_ACTIVITY = "br.goiasrp.game.GameActivity";
 
-    LinearLayout root;
-    TextView status;
-    Button play, download;
-
     @Override
-    public void onCreate(Bundle b) {
-        super.onCreate(b);
-        buildUI();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        criarLauncher();
     }
 
-    TextView text(String s, float size) {
-        TextView t = new TextView(this);
-        t.setText(s);
-        t.setTextColor(Color.WHITE);
-        t.setTextSize(size);
-        t.setGravity(Gravity.CENTER);
-        t.setPadding(20,20,20,20);
-        return t;
+    private void criarLauncher() {
+
+        // IMAGEM DE FUNDO
+        ImageView background = new ImageView(this);
+        background.setImageResource(R.drawable.goias_capa);
+        background.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        FrameLayout tela = new FrameLayout(this);
+        tela.addView(background);
+
+        // ÁREA DOS BOTÕES
+        LinearLayout menu = new LinearLayout(this);
+        menu.setOrientation(LinearLayout.VERTICAL);
+        menu.setGravity(Gravity.CENTER);
+        menu.setPadding(40, 20, 40, 30);
+
+        // Botão atualizar
+        Button atualizar = new Button(this);
+        atualizar.setText("📦  BAIXAR / ATUALIZAR ARQUIVOS");
+        atualizar.setTextSize(16);
+        atualizar.setAllCaps(false);
+        atualizar.setTextColor(Color.WHITE);
+        atualizar.setBackgroundColor(Color.rgb(40, 40, 40));
+
+        menu.addView(atualizar,
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        65
+                ));
+
+        atualizar.setOnClickListener(v -> {
+
+            Toast.makeText(
+                    this,
+                    "Sistema de atualização em preparação.",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+        });
+
+        // Botão jogar
+        Button jogar = new Button(this);
+        jogar.setText("▶  JOGAR GOIÁS RP");
+        jogar.setTextSize(18);
+        jogar.setAllCaps(false);
+        jogar.setTextColor(Color.WHITE);
+        jogar.setBackgroundColor(Color.rgb(20, 130, 60));
+
+        LinearLayout.LayoutParams jogarParams =
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        70
+                );
+
+        jogarParams.topMargin = 15;
+
+        menu.addView(jogar, jogarParams);
+
+        jogar.setOnClickListener(v -> abrirJogo());
+
+        // Posiciona os botões na parte inferior
+        FrameLayout.LayoutParams menuParams =
+                new FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT
+                );
+
+        menuParams.gravity = Gravity.BOTTOM;
+
+        tela.addView(menu, menuParams);
+
+        setContentView(tela);
     }
 
-    Button button(String s) {
-        Button b = new Button(this);
-        b.setText(s);
-        b.setTextColor(Color.WHITE);
-        b.setTextSize(16);
-        b.setAllCaps(false);
-        return b;
-    }
+    private void abrirJogo() {
 
-    void buildUI() {
-        root = new LinearLayout(this);
-        root.setOrientation(LinearLayout.VERTICAL);
-        root.setGravity(Gravity.CENTER);
-        root.setPadding(35,45,35,35);
-        root.setBackgroundColor(Color.rgb(7,17,31));
-
-        TextView logo = text("GOIÁS RP", 34);
-        logo.setTextColor(Color.rgb(8,125,255));
-        root.addView(logo, new LinearLayout.LayoutParams(-1,90));
-
-        TextView sub = text("SEU ROLEPLAY COMEÇA AQUI", 15);
-        root.addView(sub);
-
-        status = text("Goiás RP pronto para jogar", 14);
-        root.addView(status);
-
-        download = button("📦  BAIXAR / ATUALIZAR ARQUIVOS");
-        root.addView(download, new LinearLayout.LayoutParams(-1,65));
-        download.setOnClickListener(v -> downloadMessage());
-
-        play = button("▶  JOGAR GOIÁS RP");
-        root.addView(play, new LinearLayout.LayoutParams(-1,65));
-
-        play.setOnClickListener(v -> abrirJogo());
-
-        TextView info = text(
-            "Versão do launcher: 1.0",
-            12
-        );
-        root.addView(info);
-
-        setContentView(root);
-    }
-
-    void abrirJogo() {
         Intent intent = new Intent();
+
         intent.setComponent(new ComponentName(
-            GAME_PACKAGE,
-            GAME_ACTIVITY
+                GAME_PACKAGE,
+                GAME_ACTIVITY
         ));
 
         try {
+
             startActivity(intent);
+
         } catch (Exception e) {
+
             Toast.makeText(
-                this,
-                "A base do jogo ainda não está instalada.",
-                Toast.LENGTH_LONG
+                    this,
+                    "A base do jogo ainda não está instalada.",
+                    Toast.LENGTH_LONG
             ).show();
         }
-    }
-
-    void downloadMessage() {
-        new AlertDialog.Builder(this)
-            .setTitle("Arquivos do Goiás RP")
-            .setMessage(
-                "A área de atualização está preparada. " +
-                "Quando você tiver a hospedagem, configuraremos aqui " +
-                "o endereço do pacote de mods, versão e atualização."
-            )
-            .setPositiveButton("OK", null)
-            .show();
     }
 }
